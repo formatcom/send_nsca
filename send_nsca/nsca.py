@@ -15,6 +15,7 @@
 #
 # Copyright (C) 2012 Yelp, Inc.
 # Written by James Brown <jbrown@yelp.com>
+# MOD by Vinicio Valbuena <vinicio.valbuena89@gmail.com>
 #
 # This software is available under the terms of the Lesser GNU Public
 # License, Version 2.1
@@ -51,6 +52,7 @@ _TRANSMITTED_IV_SIZE = 128
 
 PACKET_VERSION = 3
 
+DEFAULT_HOST = '0.0.0.0'
 DEFAULT_PORT = 5667
 
 log = logging.getLogger("send_nsca")
@@ -271,7 +273,14 @@ class ConfigParseError(Exception):
 
 
 class NscaSender(object):
-    def __init__(self, remote_host, config_path='/etc/send_nsca.cfg', port=DEFAULT_PORT, timeout=10, send_to_all=True):
+    def __init__(self, remote_host=DEFAULT_HOST,
+                        port=DEFAULT_PORT,
+                        timeout=10,
+                        password='',
+                        encryption_method_i=0,
+                        send_to_all=True,
+                        config_path=None,
+                        **kwargs):
         """Constructor
 
         Arguments:
@@ -281,8 +290,8 @@ class NscaSender(object):
         """
         self.port = port
         self.timeout = timeout
-        self.password = ''
-        self.encryption_method_i = 0
+        self.password = password
+        self.encryption_method_i = encryption_method_i
         self.remote_host = remote_host
         self.send_to_all = send_to_all
         self._conns = []
